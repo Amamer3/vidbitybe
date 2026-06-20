@@ -3,6 +3,7 @@ export interface ChatMessage {
   sender: string;
   text: string;
   timestamp: number;
+  isLocal: boolean;
 }
 
 export const CHAT_TOPIC = "chat";

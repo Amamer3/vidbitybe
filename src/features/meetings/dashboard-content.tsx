@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Alert } from "@/components/ui/alert";
 import { Spinner } from "@/components/ui/spinner";
 import { InstantMeetingHero } from "@/features/meetings/instant-meeting-hero";
@@ -11,7 +11,6 @@ import { useAuthStore } from "@/store/auth";
 import type { Meeting } from "@/types/meeting";
 import { ApiError } from "@/types/api";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { toast } from "@/lib/toast";
 
 function DashboardSection({
   title,
@@ -39,22 +38,37 @@ export function DashboardContent() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function loadMeetings() {
-      try {
-        const data = await meetingsService.list();
-        setMeetings(data.meetings ?? []);
-      } catch (err) {
-        const message = err instanceof ApiError ? err.message : "Failed to load meetings.";
-        setError(message);
-        toast.error(message);
-      } finally {
-        setIsLoading(false);
-      }
+  const loadMeetings = useCallback(async () => {
+    try {
+      const data = await meetingsService.list();
+      setMeetings(data.meetings ?? []);
+      setError(null);
+    } catch (err) {
+      const message = err instanceof ApiError ? err.message : "Failed to load meetings.";
+      setError(message);
+    } finally {
+      setIsLoading(false);
     }
-
-    loadMeetings();
   }, []);
+
+  useEffect(() => {
+    void loadMeetings();
+  }, [loadMeetings]);
+
+  // Refresh the list whenever the user returns to this tab so live/ended
+  // status changes are reflected without a full page reload.
+  useEffect(() => {
+    const handleFocus = () => void loadMeetings();
+    const handleVisibility = () => {
+      if (!document.hidden) void loadMeetings();
+    };
+    window.addEventListener("focus", handleFocus);
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => {
+      window.removeEventListener("focus", handleFocus);
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
+  }, [loadMeetings]);
 
   const upcoming = meetings.filter((m) => m.status === "scheduled" || m.status === "live");
   const recent = meetings.filter((m) => m.status === "ended");

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useLocalParticipant, useRoomContext } from "@livekit/components-react";
 import { RoomEvent } from "livekit-client";
 import { Send, X } from "lucide-react";
@@ -13,18 +13,21 @@ import { cn } from "@/lib/utils";
 export function ChatPanel() {
   const room = useRoomContext();
   const { localParticipant } = useLocalParticipant();
-  const { toggleChat } = useUiStore();
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [text, setText] = useState("");
+  const { toggleChat, chatMessages, addChatMessage, clearUnread } = useUiStore();
+  const inputRef = useRef<HTMLInputElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  const senderName =
-    localParticipant.name || localParticipant.identity || "You";
+  const senderName = localParticipant.name || localParticipant.identity || "You";
+
+  // Clear unread badge when the panel is open
+  useEffect(() => {
+    clearUnread();
+  }, [clearUnread]);
 
   useEffect(() => {
     const handleData = (
       payload: Uint8Array,
-      participant?: { identity?: string; name?: string },
+      _participant?: unknown,
       _kind?: unknown,
       topic?: string,
     ) => {
@@ -32,15 +35,13 @@ export function ChatPanel() {
       try {
         const decoded = JSON.parse(new TextDecoder().decode(payload)) as Omit<
           ChatMessage,
-          "id"
+          "id" | "isLocal"
         >;
-        setMessages((prev) => [
-          ...prev,
-          {
-            ...decoded,
-            id: `${decoded.timestamp}-${decoded.sender}-${Math.random()}`,
-          },
-        ]);
+        addChatMessage({
+          ...decoded,
+          id: `${decoded.timestamp}-${decoded.sender}-${Math.random()}`,
+          isLocal: false,
+        });
       } catch {
         // ignore malformed messages
       }
@@ -50,17 +51,17 @@ export function ChatPanel() {
     return () => {
       room.off(RoomEvent.DataReceived, handleData);
     };
-  }, [room]);
+  }, [room, addChatMessage]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [chatMessages]);
 
   const sendMessage = useCallback(async () => {
-    const trimmed = text.trim();
+    const trimmed = (inputRef.current?.value ?? "").trim();
     if (!trimmed) return;
 
-    const message: Omit<ChatMessage, "id"> = {
+    const message: Omit<ChatMessage, "id" | "isLocal"> = {
       sender: senderName,
       text: trimmed,
       timestamp: Date.now(),
@@ -69,12 +70,13 @@ export function ChatPanel() {
     const encoded = new TextEncoder().encode(JSON.stringify(message));
     await localParticipant.publishData(encoded, { reliable: true, topic: CHAT_TOPIC });
 
-    setMessages((prev) => [
-      ...prev,
-      { ...message, id: `${message.timestamp}-${message.sender}-local` },
-    ]);
-    setText("");
-  }, [localParticipant, senderName, text]);
+    addChatMessage({
+      ...message,
+      id: `${message.timestamp}-local`,
+      isLocal: true,
+    });
+    if (inputRef.current) inputRef.current.value = "";
+  }, [localParticipant, senderName, addChatMessage]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -102,35 +104,32 @@ export function ChatPanel() {
       </div>
 
       <div className="flex-1 space-y-3 overflow-y-auto p-4">
-        {messages.length === 0 ? (
+        {chatMessages.length === 0 ? (
           <div className="flex h-full min-h-[12rem] flex-col items-center justify-center text-center">
             <p className="text-sm text-zinc-500">No messages yet</p>
             <p className="mt-1 text-xs text-zinc-600">Say hello to everyone in the call</p>
           </div>
         ) : (
-          messages.map((msg) => {
-            const isOwn = msg.sender === senderName;
-            return (
+          chatMessages.map((msg) => (
+            <div
+              key={msg.id}
+              className={cn("flex flex-col", msg.isLocal ? "items-end" : "items-start")}
+            >
+              {!msg.isLocal && (
+                <span className="mb-1 text-xs text-zinc-500">{msg.sender}</span>
+              )}
               <div
-                key={msg.id}
-                className={cn("flex flex-col", isOwn ? "items-end" : "items-start")}
-              >
-                {!isOwn && (
-                  <span className="mb-1 text-xs text-zinc-500">{msg.sender}</span>
+                className={cn(
+                  "max-w-[85%] rounded-2xl px-3.5 py-2 text-sm",
+                  msg.isLocal
+                    ? "rounded-br-md bg-primary text-primary-foreground"
+                    : "rounded-bl-md bg-zinc-800 text-zinc-100",
                 )}
-                <div
-                  className={cn(
-                    "max-w-[85%] rounded-2xl px-3.5 py-2 text-sm",
-                    isOwn
-                      ? "rounded-br-md bg-primary text-primary-foreground"
-                      : "rounded-bl-md bg-zinc-800 text-zinc-100",
-                  )}
-                >
-                  {msg.text}
-                </div>
+              >
+                {msg.text}
               </div>
-            );
-          })
+            </div>
+          ))
         )}
         <div ref={bottomRef} />
       </div>
@@ -138,16 +137,15 @@ export function ChatPanel() {
       <div className="border-t border-zinc-800 p-3 pb-safe">
         <div className="flex gap-2">
           <Input
+            ref={inputRef}
             placeholder="Type a message..."
-            value={text}
-            onChange={(e) => setText(e.target.value)}
+            defaultValue=""
             onKeyDown={handleKeyDown}
             className="border-zinc-700 bg-zinc-900 text-zinc-100 placeholder:text-zinc-500 focus-visible:ring-primary"
           />
           <Button
             size="icon"
             onClick={() => void sendMessage()}
-            disabled={!text.trim()}
             className="shrink-0 rounded-xl"
           >
             <Send className="h-4 w-4" />

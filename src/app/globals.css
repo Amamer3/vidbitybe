@@ -76,7 +76,7 @@ body {
 }
 
 .meeting-room {
-  background: var(--meeting-bg);
+  background: #202124;
   color: var(--meeting-foreground);
 }
 

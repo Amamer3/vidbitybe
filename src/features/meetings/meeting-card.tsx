@@ -48,12 +48,19 @@ export function MeetingCard({ meeting, currentUserId }: MeetingCardProps) {
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           {isHost ? "You are the host" : "Participant"}
         </div>
-        <Button asChild className="w-full" variant={meeting.status === "live" ? "default" : "outline"}>
-          <Link href={`/meeting/${meeting.code}`}>
+        {meeting.status === "ended" ? (
+          <Button className="w-full" variant="outline" disabled>
             <Video className="h-4 w-4" />
-            {meeting.status === "ended" ? "View" : "Join"}
-          </Link>
-        </Button>
+            Meeting ended
+          </Button>
+        ) : (
+          <Button asChild className="w-full" variant={meeting.status === "live" ? "default" : "outline"}>
+            <Link href={`/meeting/${meeting.code}`}>
+              <Video className="h-4 w-4" />
+              Join
+            </Link>
+          </Button>
+        )}
       </CardContent>
     </Card>
   );

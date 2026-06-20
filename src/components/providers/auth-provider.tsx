@@ -26,7 +26,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       try {
         const tokens = await authService.refresh(refreshToken);
-        useAuthStore.getState().setTokens(tokens.accessToken, tokens.refreshToken);
+        // Inject tokens into state so getMe can send an auth header, without
+        // scheduling an early refresh timer (setAuth below does that once).
+        useAuthStore.setState({
+          accessToken: tokens.accessToken,
+          refreshToken: tokens.refreshToken,
+          isAuthenticated: true,
+        });
         const { user } = await usersService.getMe();
         if (!cancelled) {
           setAuth(user, tokens.accessToken, tokens.refreshToken);

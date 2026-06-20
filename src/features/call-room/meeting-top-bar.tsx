@@ -1,69 +1,83 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Check, Copy, Crown } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { getMeetingJoinUrl } from "@/lib/meeting-url";
-import { toast } from "@/lib/toast";
-import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
+import { Info } from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { getInitials } from "@/lib/utils";
+import { useAuthStore } from "@/store/auth";
 import type { Meeting } from "@/types/meeting";
 
 interface MeetingTopBarProps {
   meeting: Meeting;
-  isHost: boolean;
 }
 
-export function MeetingTopBar({ meeting, isHost }: MeetingTopBarProps) {
-  const meetingLink = getMeetingJoinUrl(meeting.code);
-  const { copied, copy } = useCopyToClipboard();
+function formatClock(date: Date) {
+  return date.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+}
 
-  const copyLink = async () => {
-    const didCopy = await copy(meetingLink);
-    if (didCopy) {
-      toast.copied("Meeting link copied");
-    } else {
-      toast.error("Could not copy link");
+export function MeetingTopBar({ meeting }: MeetingTopBarProps) {
+  const user = useAuthStore((s) => s.user);
+  const [time, setTime] = useState(() => formatClock(new Date()));
+
+  useEffect(() => {
+    function tick() {
+      setTime(formatClock(new Date()));
     }
-  };
+
+    // Sync the first tick to the next real minute boundary so the display
+    // never lags behind the system clock by more than a second.
+    const now = new Date();
+    const msToNextMinute = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
+    let intervalId: number | null = null;
+
+    const timeoutId = window.setTimeout(() => {
+      tick();
+      intervalId = window.setInterval(tick, 60_000);
+    }, msToNextMinute);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+      if (intervalId) window.clearInterval(intervalId);
+    };
+  }, []);
 
   return (
-    <header className="flex shrink-0 items-center justify-between gap-2 border-b border-[var(--meeting-border)] bg-[var(--meeting-surface)]/95 px-3 py-2.5 backdrop-blur-md sm:gap-4 sm:px-6 sm:py-3">
-      <div className="flex min-w-0 items-center gap-3">
-        <Button
-          variant="ghost"
-          size="icon"
-          asChild
-          className="shrink-0 text-[var(--meeting-muted)] hover:bg-[var(--meeting-surface-elevated)] hover:text-[var(--meeting-foreground)]"
-        >
-          <Link href="/dashboard" aria-label="Back to dashboard">
-            <ArrowLeft className="h-5 w-5" />
-          </Link>
-        </Button>
-
-        <div className="min-w-0">
-          <h1 className="truncate text-sm font-semibold sm:text-lg">{meeting.title}</h1>
-          <button
-            type="button"
-            onClick={() => void copyLink()}
-            className="group mt-0.5 flex items-center gap-1.5 text-xs text-[var(--meeting-muted)] transition-colors hover:text-[var(--meeting-foreground)]"
-          >
-            <span className="font-mono">{meeting.code}</span>
-            {copied ? (
-              <Check className="h-3.5 w-3.5 text-emerald-400" />
-            ) : (
-              <Copy className="h-3.5 w-3.5 opacity-0 transition-opacity group-hover:opacity-100" />
-            )}
-            <span className="hidden sm:inline">{copied ? "Copied" : "Copy link"}</span>
-          </button>
+    <TooltipProvider>
+      <header className="absolute inset-x-0 top-0 z-30 flex h-12 items-center justify-between px-4 pt-safe sm:px-6">
+        <div className="flex min-w-0 items-center gap-2 text-sm text-zinc-300 sm:gap-3">
+          <span className="shrink-0 tabular-nums">{time}</span>
+          <span className="hidden text-zinc-600 sm:inline">|</span>
+          <span className="truncate font-mono text-xs sm:text-sm">{meeting.code}</span>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                type="button"
+                className="shrink-0 rounded-full p-1 text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-zinc-200"
+                aria-label={`Meeting info: ${meeting.title}`}
+              >
+                <Info className="h-4 w-4" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom" className="max-w-xs">
+              {meeting.title}
+            </TooltipContent>
+          </Tooltip>
         </div>
-      </div>
 
-      {isHost ? (
-        <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[10px] font-medium text-amber-300 sm:gap-1.5 sm:px-3 sm:py-1 sm:text-xs">
-          <Crown className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
-          <span className="hidden min-[380px]:inline">Host</span>
-        </span>
-      ) : null}
-    </header>
+        <Link
+          href="/settings"
+          className="shrink-0 rounded-full outline-none ring-primary transition-opacity hover:opacity-90 focus-visible:ring-2"
+          aria-label="Account settings"
+        >
+          <Avatar className="h-8 w-8 border border-zinc-700 sm:h-9 sm:w-9">
+            <AvatarFallback className="bg-primary text-xs text-primary-foreground">
+              {user ? getInitials(user.firstName, user.lastName) : "?"}
+            </AvatarFallback>
+          </Avatar>
+        </Link>
+      </header>
+    </TooltipProvider>
   );
 }
