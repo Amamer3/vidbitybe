@@ -3,12 +3,15 @@
 import { create } from "zustand";
 import type { ChatMessage } from "@/features/call-room/types";
 
+type LayoutMode = "speaker" | "grid";
+
 interface UiState {
   sidebarOpen: boolean;
   chatOpen: boolean;
   participantsOpen: boolean;
   unreadChatCount: number;
   chatMessages: ChatMessage[];
+  layoutMode: LayoutMode;
   setSidebarOpen: (open: boolean) => void;
   setChatOpen: (open: boolean) => void;
   setParticipantsOpen: (open: boolean) => void;
@@ -18,6 +21,7 @@ interface UiState {
   incrementUnread: () => void;
   clearUnread: () => void;
   clearChatMessages: () => void;
+  toggleLayoutMode: () => void;
 }
 
 export const useUiStore = create<UiState>((set) => ({
@@ -26,6 +30,7 @@ export const useUiStore = create<UiState>((set) => ({
   participantsOpen: false,
   unreadChatCount: 0,
   chatMessages: [],
+  layoutMode: "speaker",
   setSidebarOpen: (open) => set({ sidebarOpen: open }),
   setChatOpen: (open) => set({ chatOpen: open }),
   setParticipantsOpen: (open) => set({ participantsOpen: open }),
@@ -35,4 +40,6 @@ export const useUiStore = create<UiState>((set) => ({
   incrementUnread: () => set((state) => ({ unreadChatCount: state.unreadChatCount + 1 })),
   clearUnread: () => set({ unreadChatCount: 0 }),
   clearChatMessages: () => set({ chatMessages: [], unreadChatCount: 0 }),
+  toggleLayoutMode: () =>
+    set((state) => ({ layoutMode: state.layoutMode === "speaker" ? "grid" : "speaker" })),
 }));

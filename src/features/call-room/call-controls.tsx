@@ -7,6 +7,8 @@ import {
   useRoomContext,
 } from "@livekit/components-react";
 import {
+  Layout,
+  LayoutGrid,
   Mic,
   MicOff,
   Video,
@@ -89,8 +91,16 @@ export function CallControls({ meetingId, isHost }: CallControlsProps) {
   const room = useRoomContext();
   const { localParticipant } = useLocalParticipant();
   const participantCount = useParticipants().length;
-  const { chatOpen, participantsOpen, unreadChatCount, setChatOpen, setParticipantsOpen, clearUnread } =
-    useUiStore();
+  const {
+    chatOpen,
+    participantsOpen,
+    unreadChatCount,
+    layoutMode,
+    setChatOpen,
+    setParticipantsOpen,
+    clearUnread,
+    toggleLayoutMode,
+  } = useUiStore();
 
   const [isLeaving, setIsLeaving] = useState(false);
   const [isEnding, setIsEnding] = useState(false);
@@ -208,6 +218,20 @@ export function CallControls({ meetingId, isHost }: CallControlsProps) {
             >
               <MonitorUp className="h-5 w-5" />
             </ControlButton>
+
+            {participantCount > 1 && (
+              <ControlButton
+                label={layoutMode === "speaker" ? "Switch to grid view" : "Switch to speaker view"}
+                active={layoutMode === "grid"}
+                onClick={toggleLayoutMode}
+              >
+                {layoutMode === "speaker" ? (
+                  <LayoutGrid className="h-5 w-5" />
+                ) : (
+                  <Layout className="h-5 w-5" />
+                )}
+              </ControlButton>
+            )}
 
             <div className="mx-1 hidden h-10 w-px bg-zinc-700 sm:block" />
 
