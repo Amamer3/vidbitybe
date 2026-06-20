@@ -34,11 +34,11 @@ function MeetingPreviewMockup() {
           <div className="relative aspect-video overflow-hidden rounded-xl bg-gradient-to-br from-zinc-800 to-zinc-900 sm:col-span-2">
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/20 text-xl font-semibold text-primary">
-                K
+                KA
               </div>
             </div>
             <div className="absolute bottom-2 left-2 rounded-md bg-black/60 px-2 py-1 text-xs text-white">
-              Kofi Brown (Host)
+              Kwame Asante (Host)
             </div>
           </div>
           <div className="relative aspect-video overflow-hidden rounded-xl bg-zinc-900">
