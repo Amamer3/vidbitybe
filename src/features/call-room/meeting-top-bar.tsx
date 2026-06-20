@@ -1,7 +1,8 @@
 "use client";
 
+import { useRef } from "react";
 import Link from "next/link";
-import { ArrowLeft, Copy, Crown, Link2, Share2 } from "lucide-react";
+import { ArrowLeft, Check, Copy, Crown, Link2, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getMeetingJoinUrl } from "@/lib/meeting-url";
@@ -16,12 +17,29 @@ interface MeetingTopBarProps {
 
 export function MeetingTopBar({ meeting, isHost }: MeetingTopBarProps) {
   const meetingLink = getMeetingJoinUrl(meeting.code);
-  const { copy } = useCopyToClipboard();
+  const { copied, copy, resetCopied } = useCopyToClipboard();
+  const copyToastIdRef = useRef<string | number | undefined>(undefined);
+
+  const clearCopyFeedback = () => {
+    resetCopied();
+    if (copyToastIdRef.current !== undefined) {
+      toast.dismiss(copyToastIdRef.current);
+      copyToastIdRef.current = undefined;
+    }
+  };
 
   const copyLink = async () => {
+    if (copied) {
+      clearCopyFeedback();
+      return;
+    }
+
     const didCopy = await copy(meetingLink);
     if (didCopy) {
-      toast.copied("Meeting link copied");
+      copyToastIdRef.current = toast.copied("Meeting link copied", () => {
+        resetCopied();
+        copyToastIdRef.current = undefined;
+      });
     } else {
       toast.error("Could not copy link");
     }
@@ -46,7 +64,10 @@ export function MeetingTopBar({ meeting, isHost }: MeetingTopBarProps) {
 
     const didCopy = await copy(meetingLink);
     if (didCopy) {
-      toast.copied("Meeting link copied");
+      copyToastIdRef.current = toast.copied("Meeting link copied", () => {
+        resetCopied();
+        copyToastIdRef.current = undefined;
+      });
     } else {
       toast.error("Could not share link");
     }
@@ -99,9 +120,10 @@ export function MeetingTopBar({ meeting, isHost }: MeetingTopBarProps) {
                     size="sm"
                     className="flex-1 sm:flex-none"
                     onClick={() => void copyLink()}
+                    aria-pressed={copied}
                   >
-                    <Copy className="h-4 w-4" />
-                    Copy
+                    {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                    {copied ? "Copied" : "Copy"}
                   </Button>
                   <Button
                     type="button"
