@@ -26,6 +26,7 @@ This repository contains the **frontend** — a [Next.js](https://nextjs.org/) a
 - [Deployment](#deployment)
 - [Development Guidelines](#development-guidelines)
 - [Troubleshooting](#troubleshooting)
+- [Dependencies on GitHub](#dependencies-on-github)
 - [Related Repositories](#related-repositories)
 - [License](#license)
 
@@ -219,6 +220,8 @@ Copy `.env.example` to `.env` for Docker Compose, or `.env.local` for local `npm
 | `npm run build` | Production build (standalone output) |
 | `npm run start` | Start production server (run `build` first) |
 | `npm run lint` | Run ESLint |
+| `npm run licenses` | Regenerate [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) (production deps) |
+| `npm run licenses:csv` | Same as above, CSV output |
 
 ---
 
@@ -542,6 +545,43 @@ Follow existing ShadCN-style patterns in `src/components/ui/`. Use Tailwind util
 
 - Use a URL reachable from the **client browser**, not from inside the container
 - See Docker notes above for `host.docker.internal`
+
+---
+
+## Dependencies on GitHub
+
+Third-party packages (Next.js, LiveKit, React, etc.) are **not published by this repo** — they come from npm. GitHub discovers them automatically when you push:
+
+| File | Purpose |
+|------|---------|
+| [`package.json`](./package.json) | Declares direct dependencies |
+| [`package-lock.json`](./package-lock.json) | Locks versions; powers the dependency graph |
+
+After pushing, view them at **Repository → Insights → Dependency graph**.
+
+### Dependabot
+
+[`.github/dependabot.yml`](./.github/dependabot.yml) opens weekly pull requests to update npm dependencies (production and dev groups). No extra setup is required once the file is on `main`.
+
+### Third-party licenses
+
+Production dependency licenses are listed in **[THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md)**.
+
+Regenerate after adding or upgrading packages:
+
+```bash
+npm run licenses
+```
+
+Commit the updated file along with `package.json` and `package-lock.json`.
+
+### What to commit for GitHub
+
+```bash
+git add package.json package-lock.json .github/dependabot.yml THIRD_PARTY_NOTICES.md
+git commit -m "Add dependency tracking and third-party notices"
+git push
+```
 
 ---
 

@@ -6,7 +6,9 @@
     "dev": "next dev -p 3001",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "licenses": "license-checker --production --markdown --out THIRD_PARTY_NOTICES.md",
+    "licenses:csv": "license-checker --production --csv --out THIRD_PARTY_NOTICES.csv"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
@@ -40,6 +42,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
+    "license-checker": "^25.0.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
