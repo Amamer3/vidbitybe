@@ -135,7 +135,7 @@ export function ChatPanel() {
         <div ref={bottomRef} />
       </div>
 
-      <div className="border-t border-zinc-800 p-3">
+      <div className="border-t border-zinc-800 p-3 pb-safe">
         <div className="flex gap-2">
           <Input
             placeholder="Type a message..."

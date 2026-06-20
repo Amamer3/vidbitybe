@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useUiStore } from "@/store/ui";
 import { meetingsService } from "@/services/meetings";
+import { toast } from "@/lib/toast";
 import { cn } from "@/lib/utils";
 
 interface CallControlsProps {
@@ -57,7 +58,7 @@ function ControlButton({
               ? "bg-red-600 text-white hover:bg-red-500"
               : active
                 ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                : "bg-zinc-800 text-zinc-100 hover:bg-zinc-700",
+                : "bg-[var(--meeting-surface-elevated)] text-[var(--meeting-foreground)] hover:bg-[var(--meeting-border)]",
           )}
         >
           {children}
@@ -116,6 +117,7 @@ export function CallControls({ meetingId, isHost, onLeave }: CallControlsProps) 
       // proceed with disconnect
     } finally {
       room.disconnect();
+      toast.info("Left meeting");
       onLeave();
     }
   };
@@ -126,8 +128,10 @@ export function CallControls({ meetingId, isHost, onLeave }: CallControlsProps) 
     try {
       await meetingsService.end(meetingId);
       room.disconnect();
+      toast.success("Meeting ended for everyone");
       onLeave();
     } catch {
+      toast.error("Could not end meeting");
       setIsEnding(false);
     }
   };
@@ -135,7 +139,7 @@ export function CallControls({ meetingId, isHost, onLeave }: CallControlsProps) 
   return (
     <TooltipProvider delayDuration={300}>
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex justify-center px-2 pb-safe pt-12 sm:px-4 sm:pt-16">
-        <div className="pointer-events-auto flex max-w-full flex-wrap items-center justify-center gap-1.5 rounded-2xl border border-zinc-700/60 bg-zinc-900/95 px-2 py-2 shadow-2xl shadow-black/40 backdrop-blur-md sm:gap-3 sm:px-4 sm:py-2.5">
+        <div className="pointer-events-auto flex max-w-full flex-wrap items-center justify-center gap-1.5 rounded-2xl border border-[var(--meeting-border)] bg-[var(--meeting-surface)]/95 px-2 py-2 shadow-2xl shadow-black/40 backdrop-blur-md sm:gap-3 sm:px-4 sm:py-2.5">
           <ControlButton
             label={micEnabled ? "Mute microphone" : "Unmute microphone"}
             destructive={!micEnabled}
@@ -160,7 +164,7 @@ export function CallControls({ meetingId, isHost, onLeave }: CallControlsProps) 
             <MonitorUp className="h-5 w-5" />
           </ControlButton>
 
-          <div className="mx-1 hidden h-8 w-px bg-zinc-700 sm:block" />
+          <div className="mx-1 hidden h-8 w-px bg-[var(--meeting-border)] sm:block" />
 
           <ControlButton
             label="Participants"
@@ -179,7 +183,7 @@ export function CallControls({ meetingId, isHost, onLeave }: CallControlsProps) 
             <MessageSquare className="h-5 w-5" />
           </ControlButton>
 
-          <div className="mx-1 hidden h-8 w-px bg-zinc-700 sm:block" />
+          <div className="mx-1 hidden h-8 w-px bg-[var(--meeting-border)] sm:block" />
 
           <ControlButton
             label="Leave meeting"

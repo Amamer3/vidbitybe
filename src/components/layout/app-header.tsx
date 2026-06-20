@@ -10,6 +10,7 @@ import { useAuthStore } from "@/store/auth";
 import { authService } from "@/services/auth";
 import { getInitials } from "@/lib/utils";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useBodyScrollLock } from "@/hooks/use-body-scroll-lock";
 import { cn } from "@/lib/utils";
 
 export function AppHeader() {
@@ -32,6 +33,7 @@ export function AppHeader() {
   };
 
   const closeMenu = () => setMenuOpen(false);
+  useBodyScrollLock(menuOpen);
 
   if (!user) return null;
 
@@ -44,7 +46,7 @@ export function AppHeader() {
     );
 
   return (
-    <header className="sticky top-0 z-40 border-b bg-background/95 pt-safe backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-40 border-b border-border/70 bg-card/90 pt-safe shadow-sm backdrop-blur supports-[backdrop-filter]:bg-card/75">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-2 px-4 sm:h-16 sm:gap-4 sm:px-6">
         <div className="flex min-w-0 items-center gap-2">
           <Button
@@ -112,7 +114,7 @@ export function AppHeader() {
             className="fixed inset-0 z-40 bg-black/20 backdrop-blur-[1px] sm:hidden"
             onClick={closeMenu}
           />
-          <nav className="absolute inset-x-0 top-full z-50 border-b bg-background/95 px-4 py-4 shadow-lg backdrop-blur-md sm:hidden">
+          <nav className="absolute inset-x-0 top-full z-50 border-b border-border/70 bg-card/95 px-4 py-4 shadow-lg backdrop-blur-md sm:hidden">
             <div className="flex flex-col gap-1">
               <Link
                 href="/dashboard"

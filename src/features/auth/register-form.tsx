@@ -45,7 +45,7 @@ export function RegisterForm() {
   };
 
   return (
-    <Card className="w-full max-w-md">
+    <Card className="w-full">
       <CardHeader>
         <CardTitle>Create an account</CardTitle>
         <CardDescription>Get started with video meetings in seconds</CardDescription>

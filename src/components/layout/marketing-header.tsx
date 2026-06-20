@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Menu, Video, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useBodyScrollLock } from "@/hooks/use-body-scroll-lock";
 import { cn } from "@/lib/utils";
 
 interface MarketingHeaderProps {
@@ -18,6 +19,7 @@ export function MarketingHeader({
   const [menuOpen, setMenuOpen] = useState(false);
 
   const closeMenu = () => setMenuOpen(false);
+  useBodyScrollLock(menuOpen);
 
   return (
     <header

@@ -66,7 +66,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
 
   if (!isInitialized) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex min-h-dvh items-center justify-center px-4">
         <Spinner size="lg" />
       </div>
     );
@@ -87,7 +87,7 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
   if (!isInitialized || !isAuthenticated) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex min-h-dvh items-center justify-center px-4">
         <Spinner size="lg" />
       </div>
     );

@@ -2,6 +2,8 @@
 
 import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
+import { getMeetingJoinPath } from "@/lib/meeting-url";
+import { toast } from "@/lib/toast";
 import { meetingsService } from "@/services/meetings";
 import { useAuthStore } from "@/store/auth";
 import { ApiError } from "@/types/api";
@@ -27,10 +29,13 @@ export function useStartInstantMeeting() {
       try {
         const meetingTitle = title?.trim() || defaultInstantTitle(user?.firstName);
         const { meeting } = await meetingsService.createInstant({ title: meetingTitle });
-        router.push(`/meeting/${meeting.code}`);
-        return;
+        router.push(getMeetingJoinPath(meeting.code));
+        return meeting;
       } catch (err) {
         setError(err instanceof ApiError ? err.message : "Failed to start instant meeting.");
+        toast.error(
+          err instanceof ApiError ? err.message : "Failed to start instant meeting.",
+        );
         setIsStarting(false);
       }
     },

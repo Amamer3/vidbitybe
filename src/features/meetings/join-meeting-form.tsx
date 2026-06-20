@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert } from "@/components/ui/alert";
 import { Spinner } from "@/components/ui/spinner";
+import { getMeetingJoinPath } from "@/lib/meeting-url";
+import { toast } from "@/lib/toast";
 import { meetingsService } from "@/services/meetings";
 import { ApiError } from "@/types/api";
 
@@ -28,9 +30,10 @@ export function JoinMeetingForm() {
     setIsLoading(true);
     try {
       await meetingsService.getByCodeOrId(trimmed);
-      router.push(`/meeting/${trimmed.toLowerCase()}`);
+      router.push(getMeetingJoinPath(trimmed));
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "Meeting not found.");
+      toast.error(err instanceof ApiError ? err.message : "Meeting not found.");
     } finally {
       setIsLoading(false);
     }

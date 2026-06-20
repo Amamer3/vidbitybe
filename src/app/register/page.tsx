@@ -1,9 +1,10 @@
 import { RegisterForm } from "@/features/auth/register-form";
+import { AuthPageLayout } from "@/components/layout/auth-page-layout";
 
 export default function RegisterPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center px-4 py-8 sm:py-12">
+    <AuthPageLayout headerAction={{ href: "/login", label: "Sign in" }}>
       <RegisterForm />
-    </div>
+    </AuthPageLayout>
   );
 }

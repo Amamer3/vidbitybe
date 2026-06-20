@@ -4,13 +4,15 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 3001",
-    "build": "next build",
+    "build": "node scripts/generate-pwa-icons.mjs && next build --webpack",
+    "generate:pwa-icons": "node scripts/generate-pwa-icons.mjs",
     "start": "next start",
     "lint": "eslint",
     "licenses": "license-checker --production --markdown --out THIRD_PARTY_NOTICES.md",
     "licenses:csv": "license-checker --production --csv --out THIRD_PARTY_NOTICES.csv"
   },
   "dependencies": {
+    "@ducanh2912/next-pwa": "^10.2.9",
     "@hookform/resolvers": "^5.4.0",
     "@livekit/components-react": "^2.9.21",
     "@livekit/components-styles": "^1.2.0",
@@ -43,6 +45,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
     "license-checker": "^25.0.1",
+    "sharp": "^0.35.2",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

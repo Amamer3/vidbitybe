@@ -11,6 +11,8 @@ import { CallControls } from "@/features/call-room/call-controls";
 import { ParticipantList } from "@/features/call-room/participant-list";
 import { ChatPanel } from "@/features/call-room/chat-panel";
 import { MeetingTopBar } from "@/features/call-room/meeting-top-bar";
+import { getMeetingJoinUrl } from "@/lib/meeting-url";
+import { toast } from "@/lib/toast";
 import { meetingsService } from "@/services/meetings";
 import { useAuthStore } from "@/store/auth";
 import { useUiStore } from "@/store/ui";
@@ -35,7 +37,7 @@ function RoomContent({
   const sidePanelOpen = participantsOpen || chatOpen;
 
   return (
-    <div className="flex h-screen flex-col bg-zinc-950 text-zinc-100">
+    <div className="meeting-room flex h-dvh flex-col">
       <MeetingTopBar meeting={meeting} isHost={isHost} />
 
       <div className="relative flex min-h-0 flex-1">
@@ -123,6 +125,12 @@ export function MeetingRoom({ meetingCode }: MeetingRoomProps) {
         setLivekitUrl(
           tokenData.livekitUrl || process.env.NEXT_PUBLIC_LIVEKIT_URL || "",
         );
+
+        if (isHost) {
+          toast.info("You're live", {
+            description: `Share your invite link: ${getMeetingJoinUrl(activeMeeting.code)}`,
+          });
+        }
       } catch (err) {
         setError(err instanceof ApiError ? err.message : "Failed to join meeting.");
       } finally {
@@ -141,16 +149,16 @@ export function MeetingRoom({ meetingCode }: MeetingRoomProps) {
 
   if (isLoading) {
     return (
-      <div className="flex h-screen flex-col items-center justify-center bg-zinc-950">
+      <div className="meeting-room flex h-dvh flex-col items-center justify-center">
         <Spinner size="lg" />
-        <p className="mt-4 text-sm text-zinc-400">Joining meeting...</p>
+        <p className="mt-4 text-sm text-[var(--meeting-muted)]">Joining meeting...</p>
       </div>
     );
   }
 
   if (error || !meeting || !token || !livekitUrl) {
     return (
-      <div className="flex h-screen items-center justify-center bg-zinc-950 p-6">
+      <div className="meeting-room flex h-dvh items-center justify-center p-4 sm:p-6">
         <Alert variant="destructive" className="max-w-lg">
           {error ?? "Unable to connect to meeting."}
         </Alert>
@@ -167,7 +175,7 @@ export function MeetingRoom({ meetingCode }: MeetingRoomProps) {
       video={true}
       onDisconnected={handleLeave}
       data-lk-theme="default"
-      className="h-screen"
+      className="h-dvh"
     >
       <RoomContent meeting={meeting} onLeave={handleLeave} />
     </LiveKitRoom>

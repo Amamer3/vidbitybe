@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { CalendarPlus, Copy, Share2, Video, Zap } from "lucide-react";
+import { CalendarPlus, Copy, Share2, Video } from "lucide-react";
 import { useState } from "react";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -31,7 +31,7 @@ export function InstantMeetingHero() {
   };
 
   return (
-    <Card className="relative overflow-hidden border-primary/20 bg-gradient-to-br from-primary/[0.07] via-background to-background shadow-sm">
+    <Card className="relative overflow-hidden border-primary/15 bg-gradient-to-br from-primary/10 via-card to-accent/40 shadow-sm">
       <div
         aria-hidden
         className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-primary/10 blur-3xl"
@@ -45,7 +45,6 @@ export function InstantMeetingHero() {
         <div className="grid gap-6 sm:gap-8 lg:grid-cols-[1fr,minmax(0,22rem)] lg:items-center">
           <div className="space-y-4">
             <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-medium text-primary">
-              <Zap className="h-3.5 w-3.5" />
               One click to go live
             </div>
 
@@ -54,8 +53,8 @@ export function InstantMeetingHero() {
                 Start an instant meeting
               </h2>
               <p className="max-w-xl text-muted-foreground">
-                Create a room and jump in immediately. Share the meeting code with your team once
-                you&apos;re in the call.
+                Create a room and jump in immediately. You&apos;ll get a shareable link with the
+                meeting code to send to anyone you want to invite.
               </p>
             </div>
 
@@ -66,7 +65,7 @@ export function InstantMeetingHero() {
               </li>
               <li className="flex items-center gap-2">
                 <Share2 className="h-4 w-4 shrink-0 text-primary" />
-                Share code after join
+                Copy or share your invite link
               </li>
               <li className="flex items-center gap-2">
                 <Copy className="h-4 w-4 shrink-0 text-primary" />
@@ -75,7 +74,7 @@ export function InstantMeetingHero() {
             </ul>
           </div>
 
-          <div className="rounded-xl border bg-card/80 p-5 shadow-sm backdrop-blur-sm">
+          <div className="rounded-xl border border-border/70 bg-surface-elevated/90 p-5 shadow-sm">
             <div className="space-y-4">
               {error && <Alert variant="destructive">{error}</Alert>}
 
@@ -106,7 +105,6 @@ export function InstantMeetingHero() {
                   <Spinner size="sm" />
                 ) : (
                   <>
-                    <Zap className="h-4 w-4" />
                     Start instant meeting
                   </>
                 )}

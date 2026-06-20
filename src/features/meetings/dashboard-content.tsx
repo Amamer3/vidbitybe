@@ -11,6 +11,27 @@ import { useAuthStore } from "@/store/auth";
 import type { Meeting } from "@/types/meeting";
 import { ApiError } from "@/types/api";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { toast } from "@/lib/toast";
+
+function DashboardSection({
+  title,
+  description,
+  children,
+}: {
+  title: string;
+  description?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className="rounded-2xl border border-border/70 bg-card/90 p-4 shadow-sm sm:p-6">
+      <div className="mb-4 sm:mb-5">
+        <h2 className="text-lg font-semibold tracking-tight sm:text-xl">{title}</h2>
+        {description ? <p className="mt-1 text-sm text-muted-foreground">{description}</p> : null}
+      </div>
+      {children}
+    </section>
+  );
+}
 
 export function DashboardContent() {
   const user = useAuthStore((s) => s.user);
@@ -24,7 +45,9 @@ export function DashboardContent() {
         const data = await meetingsService.list();
         setMeetings(data.meetings ?? []);
       } catch (err) {
-        setError(err instanceof ApiError ? err.message : "Failed to load meetings.");
+        const message = err instanceof ApiError ? err.message : "Failed to load meetings.";
+        setError(message);
+        toast.error(message);
       } finally {
         setIsLoading(false);
       }
@@ -38,24 +61,26 @@ export function DashboardContent() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center py-20">
+      <div className="flex justify-center rounded-2xl border border-border/70 bg-card/90 py-20 shadow-sm">
         <Spinner size="lg" />
       </div>
     );
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {error && <Alert variant="destructive">{error}</Alert>}
 
       <InstantMeetingHero />
 
       <div className="grid gap-6 lg:grid-cols-3">
-        <div className="order-2 space-y-8 lg:order-none lg:col-span-2">
-          <section>
-            <h2 className="mb-4 text-xl font-semibold">Upcoming & live</h2>
+        <div className="order-2 space-y-6 lg:order-none lg:col-span-2">
+          <DashboardSection
+            title="Upcoming & live"
+            description="Meetings you can join now or have scheduled."
+          >
             {upcoming.length === 0 ? (
-              <p className="text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 No upcoming meetings. Use the instant meeting card above or schedule one for later.
               </p>
             ) : (
@@ -65,12 +90,11 @@ export function DashboardContent() {
                 ))}
               </div>
             )}
-          </section>
+          </DashboardSection>
 
-          <section>
-            <h2 className="mb-4 text-xl font-semibold">Recent</h2>
+          <DashboardSection title="Recent" description="Meetings that have already ended.">
             {recent.length === 0 ? (
-              <p className="text-muted-foreground">No recent meetings.</p>
+              <p className="text-sm text-muted-foreground">No recent meetings.</p>
             ) : (
               <div className="grid gap-4 sm:grid-cols-2">
                 {recent.map((meeting) => (
@@ -78,11 +102,11 @@ export function DashboardContent() {
                 ))}
               </div>
             )}
-          </section>
+          </DashboardSection>
         </div>
 
         <div className="order-1 lg:order-none">
-          <Card>
+          <Card className="border-border/70 bg-card/95 shadow-sm">
             <CardHeader>
               <CardTitle>Join with code</CardTitle>
               <CardDescription>Enter a meeting code to join instantly</CardDescription>

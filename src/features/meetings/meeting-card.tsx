@@ -22,15 +22,17 @@ export function MeetingCard({ meeting, currentUserId }: MeetingCardProps) {
   const isHost = currentUserId === meeting.hostId;
 
   return (
-    <Card>
+    <Card className="w-full">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between gap-2">
-          <div>
-            <CardTitle className="text-lg">{meeting.title}</CardTitle>
-            <CardDescription className="mt-1 font-mono text-xs">{meeting.code}</CardDescription>
+          <div className="min-w-0">
+            <CardTitle className="truncate text-base sm:text-lg">{meeting.title}</CardTitle>
+            <CardDescription className="mt-1 truncate font-mono text-xs">
+              {meeting.code}
+            </CardDescription>
           </div>
           <span
-            className={`rounded-full px-2.5 py-0.5 text-xs font-medium capitalize ${statusColors[meeting.status]}`}
+            className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-medium capitalize sm:px-2.5 sm:text-xs ${statusColors[meeting.status]}`}
           >
             {meeting.status}
           </span>

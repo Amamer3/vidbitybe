@@ -1,26 +1,35 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #f8fafc;
   --foreground: #0f172a;
   --card: #ffffff;
   --card-foreground: #0f172a;
   --popover: #ffffff;
   --popover-foreground: #0f172a;
-  --primary: #2563eb;
-  --primary-foreground: #f8fafc;
-  --secondary: #f1f5f9;
-  --secondary-foreground: #0f172a;
+  --primary: #1d4ed8;
+  --primary-foreground: #ffffff;
+  --secondary: #e2e8f0;
+  --secondary-foreground: #1e293b;
   --muted: #f1f5f9;
   --muted-foreground: #64748b;
-  --accent: #f1f5f9;
-  --accent-foreground: #0f172a;
-  --destructive: #ef4444;
-  --destructive-foreground: #f8fafc;
+  --accent: #eff6ff;
+  --accent-foreground: #1e40af;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --success: #059669;
+  --success-foreground: #ffffff;
   --border: #e2e8f0;
   --input: #e2e8f0;
   --ring: #2563eb;
-  --radius: 0.5rem;
+  --radius: 0.625rem;
+  --surface-elevated: #ffffff;
+  --meeting-bg: #09090b;
+  --meeting-surface: #18181b;
+  --meeting-surface-elevated: #27272a;
+  --meeting-border: #3f3f46;
+  --meeting-foreground: #fafafa;
+  --meeting-muted: #a1a1aa;
 }
 
 @theme inline {
@@ -40,9 +49,12 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-surface-elevated: var(--surface-elevated);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --radius-sm: calc(var(--radius) - 4px);
@@ -57,6 +69,17 @@ body {
   overflow-x: hidden;
 }
 
+.app-shell {
+  background:
+    radial-gradient(circle at top, color-mix(in srgb, var(--primary) 8%, transparent), transparent 42%),
+    var(--background);
+}
+
+.meeting-room {
+  background: var(--meeting-bg);
+  color: var(--meeting-foreground);
+}
+
 @supports (padding: env(safe-area-inset-bottom)) {
   .pb-safe {
     padding-bottom: max(1.25rem, env(safe-area-inset-bottom));
@@ -65,4 +88,31 @@ body {
   .pt-safe {
     padding-top: max(0px, env(safe-area-inset-top));
   }
+
+  .px-safe {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+}
+
+[data-sonner-toaster] {
+  --normal-bg: var(--card);
+  --normal-border: var(--border);
+  --normal-text: var(--foreground);
+  --success-bg: color-mix(in srgb, var(--success) 12%, white);
+  --success-border: color-mix(in srgb, var(--success) 28%, white);
+  --success-text: #065f46;
+  --error-bg: color-mix(in srgb, var(--destructive) 10%, white);
+  --error-border: color-mix(in srgb, var(--destructive) 24%, white);
+  --error-text: #991b1b;
+  --info-bg: color-mix(in srgb, var(--primary) 10%, white);
+  --info-border: color-mix(in srgb, var(--primary) 24%, white);
+  --info-text: #1e3a8a;
+}
+
+[data-sonner-toast] {
+  border-radius: var(--radius);
+  box-shadow:
+    0 10px 15px -3px rgb(15 23 42 / 0.08),
+    0 4px 6px -4px rgb(15 23 42 / 0.08);
 }

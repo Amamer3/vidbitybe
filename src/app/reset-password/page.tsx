@@ -1,9 +1,10 @@
 import { ResetPasswordForm } from "@/features/auth/reset-password-form";
+import { AuthPageLayout } from "@/components/layout/auth-page-layout";
 
 export default function ResetPasswordPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center px-4 py-12">
+    <AuthPageLayout headerAction={{ href: "/login", label: "Sign in" }}>
       <ResetPasswordForm />
-    </div>
+    </AuthPageLayout>
   );
 }

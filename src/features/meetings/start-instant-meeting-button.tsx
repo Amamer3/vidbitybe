@@ -1,6 +1,5 @@
 "use client";
 
-import { Zap } from "lucide-react";
 import { Button, type ButtonProps } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { useStartInstantMeeting } from "@/hooks/use-start-instant-meeting";
@@ -23,7 +22,7 @@ export function StartInstantMeetingButton({
       disabled={disabled || isStarting}
       onClick={() => startInstant(title)}
     >
-      {isStarting ? <Spinner size="sm" /> : <Zap className="h-4 w-4" />}
+      {isStarting ? <Spinner size="sm" /> : null}
       {children}
     </Button>
   );

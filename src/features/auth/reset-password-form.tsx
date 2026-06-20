@@ -46,7 +46,7 @@ function ResetPasswordFormInner() {
 
   if (!token) {
     return (
-      <Card className="w-full max-w-md">
+      <Card className="w-full">
         <CardHeader>
           <CardTitle>Invalid reset link</CardTitle>
           <CardDescription>This password reset link is invalid or has expired.</CardDescription>
@@ -61,7 +61,7 @@ function ResetPasswordFormInner() {
   }
 
   return (
-    <Card className="w-full max-w-md">
+    <Card className="w-full">
       <CardHeader>
         <CardTitle>Reset password</CardTitle>
         <CardDescription>Enter your new password below</CardDescription>

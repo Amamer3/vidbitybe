@@ -42,9 +42,9 @@ export function LoginForm() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <div className="space-y-2 text-center">
-        <h2 className="text-2xl font-bold tracking-tight">Welcome back</h2>
+        <h2 className="text-xl font-bold tracking-tight sm:text-2xl">Welcome back</h2>
         <p className="text-sm text-muted-foreground">
           Sign in to start or join a meeting
         </p>
@@ -72,7 +72,7 @@ export function LoginForm() {
         </div>
 
         <div className="space-y-2">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
             <Label htmlFor="password">Password</Label>
             <Link
               href="/forgot-password"

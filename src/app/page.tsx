@@ -121,7 +121,7 @@ const steps = [
 
 export default function LandingPage() {
   return (
-    <div className="flex flex-1 flex-col">
+    <div className="flex min-h-dvh flex-1 flex-col">
       <MarketingHeader />
 
       <main className="flex-1">
@@ -175,7 +175,7 @@ export default function LandingPage() {
         <section id="features" className="border-b bg-muted/30 py-14 sm:py-24">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
             <div className="mx-auto max-w-2xl text-center">
-              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+              <h2 className="text-2xl font-bold tracking-tight sm:text-4xl">
                 Everything you need for great calls
               </h2>
               <p className="mt-4 text-muted-foreground">
@@ -207,7 +207,7 @@ export default function LandingPage() {
         <section id="how-it-works" className="py-14 sm:py-24">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
             <div className="mx-auto max-w-2xl text-center">
-              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+              <h2 className="text-2xl font-bold tracking-tight sm:text-4xl">
                 Up and running in minutes
               </h2>
               <p className="mt-4 text-muted-foreground">
@@ -238,7 +238,7 @@ export default function LandingPage() {
               aria-hidden
               className="pointer-events-none mx-auto mb-8 h-px w-24 bg-gradient-to-r from-transparent via-primary to-transparent"
             />
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+            <h2 className="text-2xl font-bold tracking-tight sm:text-4xl">
               Ready to connect your team?
             </h2>
             <p className="mx-auto mt-4 max-w-lg text-zinc-400">
@@ -265,8 +265,8 @@ export default function LandingPage() {
         </section>
       </main>
 
-      <footer className="border-t py-10">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 sm:flex-row sm:px-6">
+      <footer className="border-t py-6 sm:py-10">
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 text-center sm:flex-row sm:px-6 sm:text-left">
           <p className="text-sm text-muted-foreground">
             &copy; {new Date().getFullYear()} VidBitye. All rights reserved.
           </p>

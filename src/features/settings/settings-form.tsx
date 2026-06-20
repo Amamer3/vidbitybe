@@ -53,7 +53,7 @@ export function SettingsForm() {
           <CardDescription>Update your personal information</CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit(onSubmitProfile)} className="space-y-4 max-w-md">
+          <form onSubmit={handleSubmit(onSubmitProfile)} className="w-full max-w-md space-y-4">
             {profileError && <Alert variant="destructive">{profileError}</Alert>}
             {profileSuccess && (
               <Alert variant="success">Profile updated successfully.</Alert>
@@ -64,7 +64,7 @@ export function SettingsForm() {
               <Input id="email" value={user?.email ?? ""} disabled />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="firstName">First name</Label>
                 <Input id="firstName" {...register("firstName")} />
@@ -81,7 +81,7 @@ export function SettingsForm() {
               </div>
             </div>
 
-            <Button type="submit" disabled={isSubmitting}>
+            <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
               {isSubmitting ? <Spinner size="sm" /> : "Save changes"}
             </Button>
           </form>
@@ -98,7 +98,7 @@ export function SettingsForm() {
             To change your password, use the forgot password flow from the login page.
           </p>
           <Separator className="my-4" />
-          <Button variant="outline" asChild>
+          <Button variant="outline" asChild className="w-full sm:w-auto">
             <a href="/forgot-password">Reset password via email</a>
           </Button>
         </CardContent>
