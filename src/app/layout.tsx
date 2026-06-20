@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "sonner";
 import { AuthProvider, AuthGuard } from "@/components/providers/auth-provider";
@@ -20,6 +20,12 @@ export const metadata: Metadata = {
   description: "Connect with your team through high-quality video meetings",
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -32,7 +38,11 @@ export default function RootLayout({
           <AuthGuard>
             <TooltipProvider>
               {children}
-              <Toaster position="top-right" />
+              <Toaster
+                position="top-center"
+                className="sm:!top-4 sm:!right-4 sm:!left-auto"
+                toastOptions={{ className: "max-w-[calc(100vw-2rem)]" }}
+              />
             </TooltipProvider>
           </AuthGuard>
         </AuthProvider>

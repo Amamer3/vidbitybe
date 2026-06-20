@@ -40,10 +40,12 @@ function RoomContent({
 
       <div className="relative flex min-h-0 flex-1">
         <div className="relative flex min-w-0 flex-1 flex-col">
-          <div className="flex min-h-0 flex-1 p-3 sm:p-4">
-            <VideoGrid />
+          <div className="flex min-h-0 flex-1 flex-col pb-24 sm:pb-28">
+            <div className="flex min-h-0 flex-1 p-2 sm:p-4">
+              <VideoGrid />
+            </div>
+            <CallControls meetingId={meeting.code} isHost={isHost} onLeave={onLeave} />
           </div>
-          <CallControls meetingId={meeting.code} isHost={isHost} onLeave={onLeave} />
         </div>
 
         {sidePanelOpen && (

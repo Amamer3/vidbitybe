@@ -51,7 +51,7 @@ export function DashboardContent() {
       <InstantMeetingHero />
 
       <div className="grid gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2 space-y-8">
+        <div className="order-2 space-y-8 lg:order-none lg:col-span-2">
           <section>
             <h2 className="mb-4 text-xl font-semibold">Upcoming & live</h2>
             {upcoming.length === 0 ? (
@@ -81,7 +81,7 @@ export function DashboardContent() {
           </section>
         </div>
 
-        <div>
+        <div className="order-1 lg:order-none">
           <Card>
             <CardHeader>
               <CardTitle>Join with code</CardTitle>

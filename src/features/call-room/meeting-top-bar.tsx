@@ -25,7 +25,7 @@ export function MeetingTopBar({ meeting, isHost }: MeetingTopBarProps) {
   };
 
   return (
-    <header className="flex shrink-0 items-center justify-between gap-4 border-b border-zinc-800/80 bg-zinc-950/90 px-4 py-3 backdrop-blur-md sm:px-6">
+    <header className="flex shrink-0 items-center justify-between gap-2 border-b border-zinc-800/80 bg-zinc-950/90 px-3 py-2.5 backdrop-blur-md sm:gap-4 sm:px-6 sm:py-3">
       <div className="flex min-w-0 items-center gap-3">
         <Button
           variant="ghost"
@@ -39,7 +39,7 @@ export function MeetingTopBar({ meeting, isHost }: MeetingTopBarProps) {
         </Button>
 
         <div className="min-w-0">
-          <h1 className="truncate text-base font-semibold text-zinc-100 sm:text-lg">
+          <h1 className="truncate text-sm font-semibold text-zinc-100 sm:text-lg">
             {meeting.title}
           </h1>
           <button
@@ -59,9 +59,9 @@ export function MeetingTopBar({ meeting, isHost }: MeetingTopBarProps) {
       </div>
 
       {isHost && (
-        <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-300">
-          <Crown className="h-3.5 w-3.5" />
-          Host
+        <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[10px] font-medium text-amber-300 sm:gap-1.5 sm:px-3 sm:py-1 sm:text-xs">
+          <Crown className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+          <span className="hidden min-[380px]:inline">Host</span>
         </span>
       )}
     </header>

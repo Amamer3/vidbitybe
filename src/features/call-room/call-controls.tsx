@@ -52,7 +52,7 @@ function ControlButton({
           disabled={disabled}
           onClick={onClick}
           className={cn(
-            "h-11 w-11 rounded-full border-0 shadow-none",
+            "h-10 w-10 rounded-full border-0 shadow-none sm:h-11 sm:w-11",
             destructive
               ? "bg-red-600 text-white hover:bg-red-500"
               : active
@@ -134,8 +134,8 @@ export function CallControls({ meetingId, isHost, onLeave }: CallControlsProps) 
 
   return (
     <TooltipProvider delayDuration={300}>
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex justify-center px-4 pb-5 pt-16">
-        <div className="pointer-events-auto flex max-w-full flex-wrap items-center justify-center gap-2 rounded-2xl border border-zinc-700/60 bg-zinc-900/95 px-3 py-2.5 shadow-2xl shadow-black/40 backdrop-blur-md sm:gap-3 sm:px-4">
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex justify-center px-2 pb-safe pt-12 sm:px-4 sm:pt-16">
+        <div className="pointer-events-auto flex max-w-full flex-wrap items-center justify-center gap-1.5 rounded-2xl border border-zinc-700/60 bg-zinc-900/95 px-2 py-2 shadow-2xl shadow-black/40 backdrop-blur-md sm:gap-3 sm:px-4 sm:py-2.5">
           <ControlButton
             label={micEnabled ? "Mute microphone" : "Unmute microphone"}
             destructive={!micEnabled}
@@ -196,10 +196,13 @@ export function CallControls({ meetingId, isHost, onLeave }: CallControlsProps) 
               size="sm"
               disabled={isEnding}
               onClick={handleEndMeeting}
-              className="h-11 rounded-full px-4"
+              className="h-10 rounded-full px-3 sm:h-11 sm:px-4"
+              aria-label="End meeting for all"
             >
               <Phone className="h-4 w-4" />
-              {isEnding ? "Ending..." : "End for all"}
+              <span className="hidden min-[400px]:inline">
+                {isEnding ? "Ending..." : "End for all"}
+              </span>
             </Button>
           )}
         </div>

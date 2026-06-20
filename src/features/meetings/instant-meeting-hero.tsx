@@ -41,8 +41,8 @@ export function InstantMeetingHero() {
         className="pointer-events-none absolute -bottom-12 left-1/3 h-32 w-32 rounded-full bg-primary/5 blur-2xl"
       />
 
-      <CardContent className="relative p-6 sm:p-8">
-        <div className="grid gap-8 lg:grid-cols-[1fr,minmax(0,22rem)] lg:items-center">
+      <CardContent className="relative p-4 sm:p-8">
+        <div className="grid gap-6 sm:gap-8 lg:grid-cols-[1fr,minmax(0,22rem)] lg:items-center">
           <div className="space-y-4">
             <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-medium text-primary">
               <Zap className="h-3.5 w-3.5" />
@@ -50,7 +50,7 @@ export function InstantMeetingHero() {
             </div>
 
             <div className="space-y-2">
-              <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+              <h2 className="text-xl font-semibold tracking-tight sm:text-3xl">
                 Start an instant meeting
               </h2>
               <p className="max-w-xl text-muted-foreground">
@@ -59,7 +59,7 @@ export function InstantMeetingHero() {
               </p>
             </div>
 
-            <ul className="grid gap-2 text-sm text-muted-foreground sm:grid-cols-3">
+            <ul className="grid gap-2 text-sm text-muted-foreground">
               <li className="flex items-center gap-2">
                 <Video className="h-4 w-4 shrink-0 text-primary" />
                 Video ready instantly

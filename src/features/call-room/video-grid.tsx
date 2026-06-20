@@ -91,7 +91,7 @@ export function VideoGrid() {
   const gridClass = useMemo(() => {
     if (participantCount === 1) return "grid-cols-1 grid-rows-1";
     if (participantCount === 2) return "grid-cols-1 sm:grid-cols-2";
-    if (participantCount <= 4) return "grid-cols-2";
+    if (participantCount <= 4) return "grid-cols-1 sm:grid-cols-2";
     if (participantCount <= 6) return "grid-cols-2 lg:grid-cols-3";
     return "grid-cols-2 lg:grid-cols-3 xl:grid-cols-4";
   }, [participantCount]);
@@ -107,7 +107,7 @@ export function VideoGrid() {
           />
         ))}
 
-      <div className={cn("grid h-full min-h-0 flex-1 gap-3", gridClass)}>
+      <div className={cn("grid h-full min-h-0 flex-1 gap-2 sm:gap-3", gridClass)}>
         {visibleTracks.length === 0 ? (
           <div className="flex h-full min-h-[16rem] items-center justify-center rounded-2xl bg-zinc-900 ring-1 ring-zinc-800/80">
             <p className="text-sm text-zinc-500">Waiting for participants...</p>

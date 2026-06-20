@@ -10,10 +10,10 @@ export default function DashboardPage() {
   return (
     <ProtectedRoute>
       <AppHeader />
-      <main className="mx-auto max-w-7xl flex-1 px-4 py-8 sm:px-6">
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <main className="mx-auto max-w-7xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
+        <div className="mb-6 flex flex-col gap-4 sm:mb-8 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-3xl font-bold">Dashboard</h1>
+            <h1 className="text-2xl font-bold sm:text-3xl">Dashboard</h1>
             <p className="text-muted-foreground">Start instantly or manage your meetings</p>
           </div>
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
