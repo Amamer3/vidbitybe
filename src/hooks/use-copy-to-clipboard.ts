@@ -14,14 +14,6 @@ export function useCopyToClipboard(resetMs = 2000) {
     };
   }, []);
 
-  const resetCopied = useCallback(() => {
-    if (timerRef.current !== undefined) {
-      window.clearTimeout(timerRef.current);
-      timerRef.current = undefined;
-    }
-    setCopied(false);
-  }, []);
-
   const copy = useCallback(
     async (text: string) => {
       try {
@@ -40,5 +32,5 @@ export function useCopyToClipboard(resetMs = 2000) {
     [resetMs],
   );
 
-  return { copied, copy, resetCopied };
+  return { copied, copy };
 }

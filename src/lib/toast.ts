@@ -2,7 +2,6 @@ import { toast as sonner } from "sonner";
 
 type ToastOptions = {
   description?: string;
-  onDismiss?: () => void;
 };
 
 export const toast = {
@@ -18,19 +17,10 @@ export const toast = {
     sonner.info(message, options);
   },
 
-  copied(label = "Copied to clipboard", onDismiss?: () => void) {
-    return sonner.success(label, {
+  copied(label = "Copied to clipboard") {
+    sonner.success(label, {
       description: "You can paste it into a message or email.",
-      cancel: {
-        label: "Dismiss",
-        onClick: () => onDismiss?.(),
-      },
-      onDismiss: () => onDismiss?.(),
     });
-  },
-
-  dismiss(id?: string | number) {
-    sonner.dismiss(id);
   },
 
   shared() {
